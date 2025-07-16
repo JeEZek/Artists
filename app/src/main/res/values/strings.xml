@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Artists</string>
+    <string name="main_label">Поиск музыкальных исполнителей</string>
+    <string name="main_label_2">Сервис позволяет найти лучшие треки исполнителей и показывает биографию.</string>
+    <string name="main_button_biography">Биография артиста</string>
+    <string name="main_button_tracks">Лучшие треки</string>
 </resources>
