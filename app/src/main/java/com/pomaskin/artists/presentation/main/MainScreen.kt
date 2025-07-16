@@ -1,4 +1,4 @@
-package com.pomaskin.artists.presentation
+package com.pomaskin.artists.presentation.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +41,6 @@ fun MainScreen(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-
         Text(
             modifier = Modifier
                 .padding(horizontal = 32.dp),
@@ -81,7 +80,7 @@ fun MainScreen(
                 .fillMaxWidth()
                 .wrapContentWidth()
                 .padding(horizontal = 32.dp),
-            onClick = onButtonBiographyClick,
+            onClick = { onButtonBiographyClick() },
         )
         GradientButton(
             text = stringResource(R.string.main_button_tracks),

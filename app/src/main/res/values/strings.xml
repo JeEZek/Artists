@@ -4,4 +4,13 @@
     <string name="main_label_2">Сервис позволяет найти лучшие треки исполнителей и показывает биографию.</string>
     <string name="main_button_biography">Биография артиста</string>
     <string name="main_button_tracks">Лучшие треки</string>
+
+    <string name="biography_label">Биография</string>
+    <string name="biography_find">Кого ищем?</string>
+
+    <string name="tracks_label">Лучшие треки</string>
+    <string name="tracks_find">Что ищем?</string>
+
+    <string name="button_find">Искать</string>
+    <string name="button_back">Вернуться назад</string>
 </resources>
