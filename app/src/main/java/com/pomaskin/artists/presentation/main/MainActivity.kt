@@ -3,6 +3,7 @@ package com.pomaskin.artists.presentation.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pomaskin.artists.navigation.AppNavGraph
 import com.pomaskin.artists.navigation.Screen.Companion.ROUTE_BIOGRAPHY
 import com.pomaskin.artists.navigation.Screen.Companion.ROUTE_MAIN
@@ -17,6 +18,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val viewModel: MainViewModel = viewModel()
             val navigationState = rememberNavigationState()
 
             AppNavGraph(
