@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pomaskin.artists.R
 import com.pomaskin.artists.ui.components.GradientButton
 import com.pomaskin.artists.ui.components.GradientLine
@@ -42,7 +44,6 @@ import com.pomaskin.artists.ui.theme.GradientLineStart
 
 @Composable
 fun BiographyScreen(
-    onButtonFindClick: (String) -> Unit,
     onButtonBackClick: () -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
@@ -90,7 +91,9 @@ fun BiographyScreen(
                 .fillMaxWidth()
                 .wrapContentWidth()
                 .padding(horizontal = 68.dp),
-            onClick = { onButtonFindClick(searchText) },
+            onClick = {
+                //TODO use function from vewModel
+            },
         )
         //TODO Box for data after searching
         Box(
