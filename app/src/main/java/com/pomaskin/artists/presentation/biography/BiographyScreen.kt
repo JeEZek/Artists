@@ -5,18 +5,24 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,10 +37,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.pomaskin.artists.R
+import com.pomaskin.artists.presentation.getApplicationComponent
 import com.pomaskin.artists.ui.components.GradientButton
 import com.pomaskin.artists.ui.components.GradientLine
 import com.pomaskin.artists.ui.theme.GradientButton1End
@@ -46,7 +55,24 @@ import com.pomaskin.artists.ui.theme.GradientLineStart
 fun BiographyScreen(
     onButtonBackClick: () -> Unit
 ) {
-    var searchText by remember { mutableStateOf("") }
+    val component = getApplicationComponent()
+    val viewModel: BiographyViewModel = viewModel(factory = component.getViewModelFactory())
+    val screenState = viewModel.state.collectAsState(BiographyScreenState.Initial)
+
+    BiographyScreenContent(
+        viewModel = viewModel,
+        screenState = screenState,
+        onButtonBackClick = onButtonBackClick
+    )
+}
+
+@Composable
+fun BiographyScreenContent(
+    viewModel: BiographyViewModel,
+    screenState: State<BiographyScreenState>,
+    onButtonBackClick: () -> Unit,
+) {
+    var artistName by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -65,8 +91,8 @@ fun BiographyScreen(
         Column {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = searchText,
-                onValueChange = { searchText = it },
+                value = artistName,
+                onValueChange = { artistName = it },
                 label = { Text(stringResource(R.string.biography_find)) },
                 singleLine = true,
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
@@ -92,17 +118,15 @@ fun BiographyScreen(
                 .wrapContentWidth()
                 .padding(horizontal = 68.dp),
             onClick = {
-                //TODO use function from vewModel
+                viewModel.onLoadButtonClick(artistName)
             },
         )
-        //TODO Box for data after searching
         Box(
             modifier = Modifier
-                .background(Black)
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            BiographyData()
+            BiographyData(screenState)
         }
         Text(
             modifier = Modifier
@@ -121,6 +145,69 @@ fun BiographyScreen(
 }
 
 @Composable
-fun BiographyData() {
+fun BiographyData(
+    screenState: State<BiographyScreenState>
+) {
+    when (val state = screenState.value) {
+        is BiographyScreenState.Initial -> {}
 
+        is BiographyScreenState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = GradientLineStart)
+            }
+        }
+
+        is BiographyScreenState.Error -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = stringResource(R.string.error))
+            }
+        }
+
+        is BiographyScreenState.Content -> {
+            val artist = state.artist
+            val imageUrl = artist.imageUrl
+            val name = artist.name
+            val bioShort = artist.content
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 64.dp)
+            ) {
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = "Track Image",
+                    modifier = Modifier
+                        .size(200.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Text(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    text = name,
+                    style = TextStyle(
+                        fontSize = 34.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Text(
+                    text = bioShort,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    overflow = TextOverflow.Ellipsis,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                    )
+                )
+            }
+        }
+    }
 }

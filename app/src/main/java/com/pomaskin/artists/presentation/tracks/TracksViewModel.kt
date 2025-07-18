@@ -4,13 +4,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pomaskin.artists.domain.usecase.GetTracksFromArtistUseCase
-
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class TracksViewModel(
+class TracksViewModel @Inject constructor(
     private val getTracksFromArtistUseCase: GetTracksFromArtistUseCase
 ) : ViewModel() {
 
@@ -25,9 +25,13 @@ class TracksViewModel(
                 _state.value = TracksScreenState.Content(tracks)
                 Log.d("TracksViewModel", "Данные успешно загружены ${tracks[0].name} ${tracks[1].name} ${tracks[2].name}")
             } catch (e: Exception) {
-                Log.d("TracksViewModel", "Ошибка при загрузке данных ${e}")
-                _state.value = TracksScreenState.Initial
+                Log.d("TracksViewModel", "Ошибка при отправке запроса ${e}")
+                _state.value = TracksScreenState.Error
             }
         }
+    }
+
+    fun resetState() {
+        _state.value = TracksScreenState.Initial
     }
 }

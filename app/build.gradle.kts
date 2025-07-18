@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -68,4 +69,12 @@ dependencies {
 
     //Gson
     implementation(libs.gson)
+
+    //Dagger2
+    implementation(libs.dagger2)
+    ksp(libs.dagger2.compiler)
+    ksp(libs.dagger2.android.processor)
+
+    //Coil
+    implementation(libs.coil.compose)
 }

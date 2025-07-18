@@ -13,4 +13,6 @@
 
     <string name="button_find">Искать</string>
     <string name="button_back">Вернуться назад</string>
+
+    <string name="error">Артист не найден</string>
 </resources>
