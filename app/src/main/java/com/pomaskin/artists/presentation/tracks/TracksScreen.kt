@@ -42,7 +42,6 @@ import com.pomaskin.artists.ui.theme.GradientLineStart
 
 @Composable
 fun TracksScreen(
-    onButtonFindClick: (String) -> Unit,
     onButtonBackClick: () -> Unit
 ) {
     var searchText by remember { mutableStateOf("") }
@@ -90,7 +89,9 @@ fun TracksScreen(
                 .fillMaxWidth()
                 .wrapContentWidth()
                 .padding(horizontal = 68.dp),
-            onClick = { onButtonFindClick(searchText) },
+            onClick = {
+                //TODO use function from vewModel
+            },
         )
         //TODO Box for data after searching
         Box(

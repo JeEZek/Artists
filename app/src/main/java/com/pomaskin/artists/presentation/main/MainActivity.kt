@@ -13,12 +13,14 @@ import com.pomaskin.artists.presentation.biography.BiographyScreen
 import com.pomaskin.artists.presentation.tracks.TracksScreen
 import com.pomaskin.artists.ui.theme.ArtistsTheme
 
+//TODO Dagger injections
+//TODO on 2 screens after clicking button use viewModel.function and check state to put data on UI
+
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel: MainViewModel = viewModel()
             val navigationState = rememberNavigationState()
 
             AppNavGraph(
@@ -31,14 +33,12 @@ class MainActivity : ComponentActivity() {
                 },
                 biographyScreenContent = {
                     BiographyScreen(
-                        onButtonBackClick = { navigationState.navigateTO(ROUTE_MAIN) },
-                        onButtonFindClick = {}
+                        onButtonBackClick = { navigationState.navigateTO(ROUTE_MAIN) }
                         )
                 },
                 tracksScreenContent = {
                     TracksScreen(
-                        onButtonBackClick = { navigationState.navigateTO(ROUTE_MAIN) },
-                        onButtonFindClick = {}
+                        onButtonBackClick = { navigationState.navigateTO(ROUTE_MAIN) }
                     )
                 }
             )
