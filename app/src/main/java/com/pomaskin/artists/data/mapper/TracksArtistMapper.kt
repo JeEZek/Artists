@@ -4,8 +4,9 @@ import com.pomaskin.artists.data.model.biography.ArtistResponseDto
 import com.pomaskin.artists.data.model.tracks.TopTracksResponseDto
 import com.pomaskin.artists.domain.entity.Artist
 import com.pomaskin.artists.domain.entity.Track
+import jakarta.inject.Inject
 
-class TracksArtistMapper {
+class TracksArtistMapper @Inject constructor() {
 
     fun mapResponseToTracks(responseDto: TopTracksResponseDto): List<Track> {
         val result = mutableListOf<Track>()

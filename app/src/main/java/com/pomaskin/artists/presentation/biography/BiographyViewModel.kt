@@ -4,12 +4,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pomaskin.artists.domain.usecase.GetArtistInfoUseCase
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class BiographyViewModel(
+class BiographyViewModel @Inject constructor(
     private val getArtistInfoUseCase: GetArtistInfoUseCase
 ): ViewModel() {
 
@@ -24,8 +25,8 @@ class BiographyViewModel(
                 _state.value = BiographyScreenState.Content(artist)
                 Log.d("BiographyViewModel","Данные успешно загружены ${artist.name}")
             } catch (e: Exception) {
-                Log.d("BiographyViewModel","Ошибка при загрузке данных ${e}")
-                _state.value = BiographyScreenState.Initial
+                Log.d("BiographyViewModel","Ошибка при отправке запроса ${e}")
+                _state.value = BiographyScreenState.Error
             }
         }
     }

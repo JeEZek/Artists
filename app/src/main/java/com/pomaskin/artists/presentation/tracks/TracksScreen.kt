@@ -5,18 +5,25 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,7 +39,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.pomaskin.artists.R
+import com.pomaskin.artists.presentation.biography.BiographyScreenState
+import com.pomaskin.artists.presentation.getApplicationComponent
 import com.pomaskin.artists.ui.components.GradientButton
 import com.pomaskin.artists.ui.components.GradientLine
 import com.pomaskin.artists.ui.theme.GradientButton1End
@@ -44,7 +55,24 @@ import com.pomaskin.artists.ui.theme.GradientLineStart
 fun TracksScreen(
     onButtonBackClick: () -> Unit
 ) {
-    var searchText by remember { mutableStateOf("") }
+    val component = getApplicationComponent()
+    val viewModel: TracksViewModel = viewModel(factory = component.getViewModelFactory())
+    val screenState = viewModel.state.collectAsState(TracksScreenState.Initial)
+
+    TrackScreenContent(
+        viewModel = viewModel,
+        screenState = screenState,
+        onButtonBackClick = onButtonBackClick
+    )
+}
+
+@Composable
+fun TrackScreenContent(
+    viewModel: TracksViewModel,
+    screenState: State<TracksScreenState>,
+    onButtonBackClick: () -> Unit,
+) {
+    var artistName by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -63,9 +91,9 @@ fun TracksScreen(
         Column {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = searchText,
-                onValueChange = { searchText = it },
-                label = { stringResource(R.string.tracks_find)  },
+                value = artistName,
+                onValueChange = { artistName = it },
+                label = { stringResource(R.string.tracks_find) },
                 singleLine = true,
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
                 keyboardOptions = KeyboardOptions.Default,
@@ -90,24 +118,25 @@ fun TracksScreen(
                 .wrapContentWidth()
                 .padding(horizontal = 68.dp),
             onClick = {
-                //TODO use function from vewModel
+                viewModel.onLoadButtonClick(artistName)
             },
         )
-        //TODO Box for data after searching
         Box(
             modifier = Modifier
-                .background(Black)
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            TracksData()
+            TracksData(screenState = screenState)
         }
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .clickable(
-                    onClick = { onButtonBackClick() }
+                    onClick = {
+                        viewModel.resetState()
+                        onButtonBackClick()
+                    }
                 ),
             style = TextStyle(
                 fontSize = 20.sp,
@@ -119,6 +148,60 @@ fun TracksScreen(
 }
 
 @Composable
-fun TracksData() {
+fun TracksData(
+    screenState: State<TracksScreenState>,
+) {
+    when (val state = screenState.value) {
+        is TracksScreenState.Initial -> {}
 
+        is TracksScreenState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = GradientLineStart)
+            }
+        }
+
+        is TracksScreenState.Error -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = stringResource(R.string.error))
+            }
+        }
+
+        is TracksScreenState.Content -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                val tracks = state.tracks
+                for (track in tracks) {
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        AsyncImage(
+                            model = track.imageUrl,
+                            contentDescription = "Track Image",
+                            modifier = Modifier
+                                .size(96.dp)
+                        )
+                        Spacer(modifier = Modifier.width(32.dp))
+                        Text(
+                            text = track.name,
+                            style = TextStyle(
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = Color.Gray
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

@@ -11,6 +11,8 @@ sealed class TracksScreenState {
 
     object Loading : TracksScreenState()
 
+    object Error : TracksScreenState()
+
     data class Content(
         val tracks: List<Track>
     ) : TracksScreenState()

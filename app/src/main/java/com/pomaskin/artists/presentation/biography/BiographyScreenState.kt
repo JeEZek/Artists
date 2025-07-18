@@ -8,6 +8,8 @@ sealed class BiographyScreenState {
 
     object Loading : BiographyScreenState()
 
+    object Error: BiographyScreenState()
+
     data class Content(
         val artist: Artist
     ) : BiographyScreenState()
