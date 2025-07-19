@@ -1,6 +1,5 @@
 package com.pomaskin.artists.presentation.tracks
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +40,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.pomaskin.artists.R
-import com.pomaskin.artists.presentation.biography.BiographyScreenState
 import com.pomaskin.artists.presentation.getApplicationComponent
 import com.pomaskin.artists.ui.components.GradientButton
 import com.pomaskin.artists.ui.components.GradientLine

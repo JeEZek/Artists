@@ -1,7 +1,7 @@
 package com.pomaskin.artists.data.repository
 
+import com.pomaskin.artists.BuildConfig
 import com.pomaskin.artists.data.mapper.TracksArtistMapper
-import com.pomaskin.artists.data.network.ApiFactory
 import com.pomaskin.artists.data.network.ApiService
 import com.pomaskin.artists.domain.entity.Artist
 import com.pomaskin.artists.domain.entity.Track
@@ -17,8 +17,7 @@ class ArtistRepositoryImpl @Inject constructor(
     private val mapper: TracksArtistMapper
 ): ArtistRepository {
 
-    //TODO replace
-    private val token = ""
+    private val token = BuildConfig.apiKey
 
 
     override fun getArtistInfo(artistName: String): Flow<Artist> = flow {
