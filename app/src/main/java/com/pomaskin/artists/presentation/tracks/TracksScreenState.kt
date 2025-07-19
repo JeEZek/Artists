@@ -1,8 +1,6 @@
 package com.pomaskin.artists.presentation.tracks
 
-import com.pomaskin.artists.domain.entity.Artist
 import com.pomaskin.artists.domain.entity.Track
-import com.pomaskin.artists.presentation.biography.BiographyScreenState
 
 sealed class TracksScreenState {
 
